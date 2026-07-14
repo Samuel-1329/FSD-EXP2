@@ -1,29 +1,37 @@
-const express = require('express');
+const express = require('express'); 
 const bodyParser = require('body-parser'); 
 
-const app = express();
-const PORT = 3000;
+const app = express(); 
+const PORT = 3000; 
 
-// Set EJS as the templating engine 
+// Set EJS as template engine
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true })); 
 
-// Middleware to parse form data 
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Route to display form data
-app.get('/', (req, res) => {
+// Show the form
+app.get('/', (req, res) => { 
 	res.render('index'); 
 });
 
-// Route to handle form submission 
+// Process the form
 app.post('/submit', (req, res) => { 
-	// const name = req.body.name;
-	// const email = req.body.email;
-	const { name, email } = req.body; 
-	res.render('result', { name: name, email: email }); 
-});
+	const name = req.body.name; 
+	const grade = req.body.grade; 
+	
+	// Set color based on grade 
+	let color = "black"; 
+	if (grade === 'A') 
+		color = 'green'; 
+	else if (grade === 'B') 
+		color = 'blue'; 
+	else 
+		color = 'red'; 
+
+	// Send values to result page 
+	res.render('result', { name: name, grade: grade, color: color });
+}); 
 
 // Start server 
-app.listen(PORT, () => {
+app.listen(PORT, () => { 
 	console.log(`Server running at http://localhost:${PORT}`); 
-});
+});    
